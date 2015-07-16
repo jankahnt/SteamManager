@@ -1,0 +1,16 @@
+# Eclipse workspace metadata
+/.metadata
+/RemoteSystemsTempFiles
+/External Plug-in Libraries
+/.gradle
+
+# Eclipse compiler output
+#/*/bin
+/*/bin_test
+/*/generated
+/*feature/compile*.xml
+
+# Bnd stuff
+/cnf/eclipse-*/bnd.index
+/cnf/cache
+/bin/
