@@ -29,7 +29,7 @@ public class SteamMainWindow extends JFrame{
 	private static final int MARGIN = 10;
 	private static final int LINE_HEIGHT = 30;
 	private static final int LABEL_WIDTH = 45;
-	private static final int BUTTON_WIDTH = 40;
+	private static final int BUTTON_WIDTH = 30;
 	
 	private Container contentPane;
 	private JPanel mainPanel;
@@ -174,14 +174,14 @@ public class SteamMainWindow extends JFrame{
 		setMinimumSize(new Dimension(640, 400));
 	}
 
-	public void toSourceButtonActionPerformed(ActionEvent event){
-		System.out.println("toSourceButton pushed");	
-	}
-	
 	public void toTargetButtonActionPerformed(ActionEvent event){
 		System.out.println("toTargetButton pushed");
 	}
 	
+	public void toSourceButtonActionPerformed(ActionEvent event){
+		System.out.println("toSourceButton pushed");	
+	}
+		
 	public void lookupSourceButtonActionPerformed(ActionEvent event){
 		if(lookupDirDialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
 			sourceText.setText(lookupDirDialog.getSelectedFile().getPath());
@@ -211,7 +211,7 @@ public class SteamMainWindow extends JFrame{
 	}
 	
 	public void steamMainWindowResized(ComponentEvent event){
-		int textFieldWidth = (contentPane.getWidth() /2) - BUTTON_WIDTH - LABEL_WIDTH - MARGIN;
+		int textFieldWidth = (contentPane.getWidth() /2) - BUTTON_WIDTH - LABEL_WIDTH - 3 * MARGIN;
 		int scrollPaneHeight = contentPane.getHeight() - ((3 * MARGIN) + LINE_HEIGHT);
 		
 		sourceLabel.setBounds(contentPane.getX() + MARGIN, contentPane.getY() + MARGIN,
@@ -219,21 +219,21 @@ public class SteamMainWindow extends JFrame{
 		sourceText.setBounds(sourceLabel.getX() + MARGIN + sourceLabel.getWidth(), sourceLabel.getY(), 
 				textFieldWidth, LINE_HEIGHT);
 		lookupSourceDir.setBounds(sourceText.getX() + sourceText.getWidth(), sourceText.getY(),
-				BUTTON_WIDTH / 2, LINE_HEIGHT);
+				BUTTON_WIDTH, LINE_HEIGHT);
 		targetLabel.setBounds(lookupSourceDir.getX() + MARGIN + lookupSourceDir.getWidth(), 
 				sourceLabel.getY(), LABEL_WIDTH, LINE_HEIGHT);
 		targetText.setBounds(targetLabel.getX() + MARGIN + targetLabel.getWidth(), targetLabel.getY(), 
 				sourceText.getWidth(), LINE_HEIGHT);
 		lookupTargetDir.setBounds(targetText.getX() + targetText.getWidth(), targetText.getY(), 
-				BUTTON_WIDTH / 2, LINE_HEIGHT);
+				BUTTON_WIDTH, LINE_HEIGHT);
 		sourceScrollPane.setBounds(sourceText.getX(), sourceText.getY() + sourceText.getHeight() + MARGIN, 
 				sourceText.getWidth() + lookupSourceDir.getWidth(), scrollPaneHeight);
 		targetScrollPane.setBounds(targetText.getX(), targetText.getY() + targetText.getHeight() + MARGIN, 
 				targetText.getWidth() + lookupTargetDir.getWidth(), scrollPaneHeight);
-		toSourceButton.setBounds(sourceScrollPane.getX() + sourceScrollPane.getWidth() + MARGIN, 
+		toTargetButton.setBounds(sourceScrollPane.getX() + sourceScrollPane.getWidth() + MARGIN, 
 				sourceScrollPane.getHeight()/2 - (MARGIN + LINE_HEIGHT * 2), LABEL_WIDTH, LINE_HEIGHT * 2);
-		toTargetButton.setBounds(toSourceButton.getX(), toSourceButton.getY() + toSourceButton.getHeight() + MARGIN, 
-				toSourceButton.getWidth(), toSourceButton.getHeight());
+		toSourceButton.setBounds(toTargetButton.getX(), toTargetButton.getY() + toTargetButton.getHeight() + MARGIN, 
+				toTargetButton.getWidth(), toTargetButton.getHeight());
 	}
 	
 
