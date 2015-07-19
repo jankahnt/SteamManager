@@ -3,6 +3,8 @@ package de.steammanager.gui;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +18,11 @@ import javax.swing.JTextField;
 
 public class SteamMainWindow extends JFrame{
 	
+	private static final int MARGIN = 10;
+	private static final int LINE_HEIGHT = 25;
+	private static final int LABEL_WIDTH = 45;
+	private static final int BUTTON_WIDTH = 40;
+	
 	private Container contentPane;
 	private JPanel mainPanel;
     private JLabel sourceLabel;
@@ -28,6 +35,8 @@ public class SteamMainWindow extends JFrame{
     private JTextField targetText;
     private JButton toSourceButton;
     private JButton toTargetButton;
+    private JButton lookupSourceDir;
+    private JButton lookupTargetDir;
 	
 	public SteamMainWindow(){
 		initComponents();
@@ -50,16 +59,18 @@ public class SteamMainWindow extends JFrame{
 		toSourceButton = new JButton("<");
 		toTargetButton = new JButton(">");
 		
+		lookupSourceDir = new JButton("…");
+		lookupTargetDir = new JButton("…");
+		
 		sourceLabel.setText("Quelle:");		
 		targetLabel.setText("Ziel:");
 		
-		toSourceButton.addActionListener(new ActionListener() {			
+		toSourceButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				toSourceButtonActionPerformed(event);				
 			}
 		});
-		
 		toTargetButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -67,10 +78,34 @@ public class SteamMainWindow extends JFrame{
 			}
 		});	
 		
+		addComponentListener(new ComponentListener() {
+			@Override
+			public void componentShown(ComponentEvent event) {}			
+			@Override
+			public void componentResized(ComponentEvent event) {
+				steamMainWindowResized(event);
+			}
+			@Override
+			public void componentMoved(ComponentEvent event) {}
+			@Override
+			public void componentHidden(ComponentEvent event) {}
+		});
+		
+		add(mainPanel);		
+		mainPanel.setLayout(null);
+		
+		mainPanel.add(sourceLabel);
+		mainPanel.add(sourceText);
+		mainPanel.add(lookupSourceDir);
+		mainPanel.add(targetLabel);
+		mainPanel.add(targetText);
+		mainPanel.add(lookupTargetDir);
+		
+		
 		setTitle("SteamManager");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocation(10, 10);
-		setSize(200, 320);
+		setLocation(50, 50);
+		setSize(400, 640);
 	}
 
 	public void toSourceButtonActionPerformed(ActionEvent event){
@@ -80,5 +115,21 @@ public class SteamMainWindow extends JFrame{
 	public void toTargetButtonActionPerformed(ActionEvent event){
 		// TODO fill action listener
 	}
+	
+	public void steamMainWindowResized(ComponentEvent event){
+		sourceLabel.setBounds(contentPane.getX() + MARGIN, contentPane.getY() + MARGIN,
+				LABEL_WIDTH, LINE_HEIGHT);
+		sourceText.setBounds(sourceLabel.getX() + MARGIN + sourceLabel.getWidth(), sourceLabel.getY(), 
+				(contentPane.getWidth() - (2 * BUTTON_WIDTH) - (2 * LABEL_WIDTH) - (3 * MARGIN)) / 2, LINE_HEIGHT);
+		lookupSourceDir.setBounds(sourceText.getX() + sourceText.getWidth(), sourceText.getY(),
+				BUTTON_WIDTH / 2, LINE_HEIGHT);
+		targetLabel.setBounds(lookupSourceDir.getX() + MARGIN + lookupSourceDir.getWidth(), 
+				sourceLabel.getY(), LABEL_WIDTH, LINE_HEIGHT);
+		targetText.setBounds(targetLabel.getX() + MARGIN + targetLabel.getWidth(), targetLabel.getY(), 
+				(contentPane.getWidth() - (2 * BUTTON_WIDTH) - (2 * LABEL_WIDTH) - (3 * MARGIN)) / 2, LINE_HEIGHT);
+		lookupTargetDir.setBounds(targetText.getX() + targetText.getWidth(), targetText.getY(), 
+				BUTTON_WIDTH / 2, LINE_HEIGHT);
+	}
+	
 
 }
