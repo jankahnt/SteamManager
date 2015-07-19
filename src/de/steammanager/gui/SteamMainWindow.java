@@ -8,12 +8,18 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import de.steammanager.files.FileManager;
+import de.steammanager.files.SteamFolder;
 
 
 
@@ -21,7 +27,7 @@ import javax.swing.JTextField;
 public class SteamMainWindow extends JFrame{
 	
 	private static final int MARGIN = 10;
-	private static final int LINE_HEIGHT = 25;
+	private static final int LINE_HEIGHT = 30;
 	private static final int LABEL_WIDTH = 45;
 	private static final int BUTTON_WIDTH = 40;
 	
@@ -39,12 +45,18 @@ public class SteamMainWindow extends JFrame{
     private JButton toTargetButton;
     private JButton lookupSourceDir;
     private JButton lookupTargetDir;
+    private JFileChooser lookupDirDialog;
+    
+    private SteamFolder sourceSteamFolder;
+    private SteamFolder targetSteamFolder;
+    private FileManager fileManager;
 	
 	public SteamMainWindow(){
 		initComponents();
 	}
 	
 	private void initComponents(){
+		
 		contentPane = this.getContentPane();
 		mainPanel = new JPanel();
 		
@@ -66,6 +78,9 @@ public class SteamMainWindow extends JFrame{
 		
 		sourceLabel.setText("Quelle:");		
 		targetLabel.setText("Ziel:");
+		
+		lookupDirDialog = new JFileChooser();
+		lookupDirDialog.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		
 		toSourceButton.addActionListener(new ActionListener() {
 			@Override
@@ -93,6 +108,34 @@ public class SteamMainWindow extends JFrame{
 			}
 		});
 		
+		sourceText.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				sourceTextFieldChanged(event);
+			}			
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				sourceTextFieldChanged(event);			
+			}			
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				sourceTextFieldChanged(event);			
+			}
+		});
+		targetText.getDocument().addDocumentListener(new DocumentListener() {		
+			@Override
+			public void removeUpdate(DocumentEvent event) {
+				targetTextFieldChanged(event);
+			}			
+			@Override
+			public void insertUpdate(DocumentEvent event) {
+				targetTextFieldChanged(event);
+			}			
+			@Override
+			public void changedUpdate(DocumentEvent event) {
+				targetTextFieldChanged(event);
+			}
+		});
 		
 		addComponentListener(new ComponentListener() {
 			@Override
@@ -140,11 +183,31 @@ public class SteamMainWindow extends JFrame{
 	}
 	
 	public void lookupSourceButtonActionPerformed(ActionEvent event){
-		System.out.println("lookupSourceButton pushed");
+		if(lookupDirDialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+			sourceText.setText(lookupDirDialog.getSelectedFile().getPath());
+		}
 	}
 	
 	public void lookupTargetButtonActionPerformed(ActionEvent event){
-		System.out.println("lookupTargetButton pushed");
+		if(lookupDirDialog.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+			targetText.setText(lookupDirDialog.getSelectedFile().getPath());
+		}
+	}
+	
+	public void sourceTextFieldChanged(DocumentEvent event){
+		if(!sourceText.getText().isEmpty()){
+			fileManager = new FileManager(sourceText.getText());
+			sourceSteamFolder = fileManager.getSteamFolder();
+			sourceList.setListData(sourceSteamFolder.getFolderListAsStringArray());
+		}
+	}
+	
+	public void targetTextFieldChanged(DocumentEvent event){
+		if(!targetText.getText().isEmpty()){
+			fileManager = new FileManager(targetText.getText());
+			targetSteamFolder = fileManager.getSteamFolder();
+			targetList.setListData(targetSteamFolder.getFolderListAsStringArray());
+		}
 	}
 	
 	public void steamMainWindowResized(ComponentEvent event){
