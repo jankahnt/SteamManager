@@ -51,4 +51,12 @@ public class SteamFolder {
 	public int getSteamFolderSize(){
 		return folderList.size();
 	}
+	
+	public String getFolderPath(String folderName){
+		return folderList.get(folderName).getPath();
+	}
+	
+	public File getFolderFile(String folderName){
+		return folderList.get(folderName);
+	}
 }

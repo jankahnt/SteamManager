@@ -33,7 +33,8 @@ public class FileManager {
 		return steamFolder;
 	}
 	
-	public Boolean copyFolder(String fileName, String targetPath){
+	public Boolean copyFolder(File folder, String targetPath){
+		System.out.println("Moving: " + folder.getPath() + " To: " + targetPath);
 		return true;
 	}
 
