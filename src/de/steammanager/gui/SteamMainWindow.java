@@ -1,6 +1,7 @@
 package de.steammanager.gui;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -16,6 +17,7 @@ import javax.swing.JTextField;
 
 
 
+@SuppressWarnings("serial")
 public class SteamMainWindow extends JFrame{
 	
 	private static final int MARGIN = 10;
@@ -78,6 +80,20 @@ public class SteamMainWindow extends JFrame{
 			}
 		});	
 		
+		lookupSourceDir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				lookupSourceButtonActionPerformed(event);
+			}
+		});
+		lookupTargetDir.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				lookupTargetButtonActionPerformed(event);
+			}
+		});
+		
+		
 		addComponentListener(new ComponentListener() {
 			@Override
 			public void componentShown(ComponentEvent event) {}			
@@ -91,6 +107,10 @@ public class SteamMainWindow extends JFrame{
 			public void componentHidden(ComponentEvent event) {}
 		});
 		
+		sourceScrollPane.setViewportView(sourceList);
+		
+		targetScrollPane.setViewportView(targetList);
+		
 		add(mainPanel);		
 		mainPanel.setLayout(null);
 		
@@ -100,35 +120,57 @@ public class SteamMainWindow extends JFrame{
 		mainPanel.add(targetLabel);
 		mainPanel.add(targetText);
 		mainPanel.add(lookupTargetDir);
-		
+		mainPanel.add(sourceScrollPane);
+		mainPanel.add(targetScrollPane);
+		mainPanel.add(toSourceButton);
+		mainPanel.add(toTargetButton);
 		
 		setTitle("SteamManager");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(50, 50);
-		setSize(400, 640);
+		setMinimumSize(new Dimension(640, 400));
 	}
 
 	public void toSourceButtonActionPerformed(ActionEvent event){
-		// TODO fill action listener		
+		System.out.println("toSourceButton pushed");	
 	}
 	
 	public void toTargetButtonActionPerformed(ActionEvent event){
-		// TODO fill action listener
+		System.out.println("toTargetButton pushed");
+	}
+	
+	public void lookupSourceButtonActionPerformed(ActionEvent event){
+		System.out.println("lookupSourceButton pushed");
+	}
+	
+	public void lookupTargetButtonActionPerformed(ActionEvent event){
+		System.out.println("lookupTargetButton pushed");
 	}
 	
 	public void steamMainWindowResized(ComponentEvent event){
+		int textFieldWidth = (contentPane.getWidth() /2) - BUTTON_WIDTH - LABEL_WIDTH - MARGIN;
+		int scrollPaneHeight = contentPane.getHeight() - ((3 * MARGIN) + LINE_HEIGHT);
+		
 		sourceLabel.setBounds(contentPane.getX() + MARGIN, contentPane.getY() + MARGIN,
 				LABEL_WIDTH, LINE_HEIGHT);
 		sourceText.setBounds(sourceLabel.getX() + MARGIN + sourceLabel.getWidth(), sourceLabel.getY(), 
-				(contentPane.getWidth() - (2 * BUTTON_WIDTH) - (2 * LABEL_WIDTH) - (3 * MARGIN)) / 2, LINE_HEIGHT);
+				textFieldWidth, LINE_HEIGHT);
 		lookupSourceDir.setBounds(sourceText.getX() + sourceText.getWidth(), sourceText.getY(),
 				BUTTON_WIDTH / 2, LINE_HEIGHT);
 		targetLabel.setBounds(lookupSourceDir.getX() + MARGIN + lookupSourceDir.getWidth(), 
 				sourceLabel.getY(), LABEL_WIDTH, LINE_HEIGHT);
 		targetText.setBounds(targetLabel.getX() + MARGIN + targetLabel.getWidth(), targetLabel.getY(), 
-				(contentPane.getWidth() - (2 * BUTTON_WIDTH) - (2 * LABEL_WIDTH) - (3 * MARGIN)) / 2, LINE_HEIGHT);
+				sourceText.getWidth(), LINE_HEIGHT);
 		lookupTargetDir.setBounds(targetText.getX() + targetText.getWidth(), targetText.getY(), 
 				BUTTON_WIDTH / 2, LINE_HEIGHT);
+		sourceScrollPane.setBounds(sourceText.getX(), sourceText.getY() + sourceText.getHeight() + MARGIN, 
+				sourceText.getWidth() + lookupSourceDir.getWidth(), scrollPaneHeight);
+		targetScrollPane.setBounds(targetText.getX(), targetText.getY() + targetText.getHeight() + MARGIN, 
+				targetText.getWidth() + lookupTargetDir.getWidth(), scrollPaneHeight);
+		toSourceButton.setBounds(sourceScrollPane.getX() + sourceScrollPane.getWidth() + MARGIN, 
+				sourceScrollPane.getHeight()/2 - (MARGIN + LINE_HEIGHT * 2), LABEL_WIDTH, LINE_HEIGHT * 2);
+		toTargetButton.setBounds(toSourceButton.getX(), toSourceButton.getY() + toSourceButton.getHeight() + MARGIN, 
+				toSourceButton.getWidth(), toSourceButton.getHeight());
 	}
 	
 
