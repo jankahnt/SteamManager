@@ -53,7 +53,12 @@ public class SteamFolder {
 	}
 	
 	public String getFolderPath(String folderName){
-		return folderList.get(folderName).getPath();
+		if(folderList.get(folderName) != null){
+			return folderList.get(folderName).getPath();
+		} else{
+			return null;
+		}
+		
 	}
 	
 	public File getFolderFile(String folderName){

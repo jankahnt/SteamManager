@@ -177,7 +177,7 @@ public class SteamMainWindow extends JFrame{
 	public void toTargetButtonActionPerformed(ActionEvent event){
 		System.out.println("toTargetButton pushed");
 		for(String value : sourceList.getSelectedValuesList()){
-			System.out.println(value);
+			fileManager.copyFolder(sourceSteamFolder, targetSteamFolder, value);
 		}
 	}
 	
